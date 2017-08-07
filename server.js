@@ -38,6 +38,14 @@ app.get('/todos', function(req,res) {
     } else if (queryparams.hasOwnProperty('completed') && queryparams.completed === 'false'){
         filteredTodos = _.where(filteredTodos, {completed:false});
     }
+
+    // "Go to work on mamamammama".indexOf('work');
+
+    if(queryparams.hasOwnProperty('q') && queryparams.q.length > 0) {
+        filteredTodos = _.filter(filteredTodos, function (todo){
+            return todo.description.toLowerCase().indexOf(queryparams.q.toLocaleLowerCase()) > -1;
+        })
+    }
     res.json(filteredTodos);
 });
 
@@ -65,8 +73,6 @@ app.post('/todos', function (req, res) {
     todos.push(body);
     res.json(body);
 });
-
-
 
 //DELETE //todos/:id
 app.delete('/todos/:id', function(req, res) {
